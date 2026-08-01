@@ -1,0 +1,19 @@
+{
+  "name": "sanctions-flow-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Educational dashboard visualizing publicly-reported illicit crypto fund flows (Iran, Russia, North Korea) tied to OFAC/fincEN/TRM Labs disclosures.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.6",
+    "leaflet": "^1.9.4"
+  }
+}
