@@ -77,6 +77,17 @@
   box-sizing: border-box;
 }
 
+/* Hide scrollbars everywhere while keeping scroll functional (cross-browser). */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome/Safari/Edge */
+}
+
 html,
 body {
   margin: 0;
