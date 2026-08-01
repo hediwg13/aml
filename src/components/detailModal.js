@@ -76,7 +76,7 @@ export function openModal(entityId) {
   modalEl.innerHTML = `
     <div class="modal-backdrop"></div>
     <div class="modal-card" role="dialog" aria-modal="true">
-      <div class="modal-header" style="border-left:4px solid ${actor.color}">
+      <div class="modal-header">
         <div class="modal-title">
           <span class="row-icon">${tp.icon}</span>
           <h2>${esc(e.name)}</h2>

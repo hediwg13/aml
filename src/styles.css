@@ -5,16 +5,17 @@
    ============================================================ */
 
 :root {
-  /* Surfaces — Matrix near-black base, deepened */
+  /* Surface ladder — depth by tonal step (anti-slop: avoid border+shadow both).
+     bg → bg-2 → panel → panel-2. Each step lifts the surface. */
   --bg: #050609;
-  --bg-2: #0b0c14; /* Matrix secondary (verbatim) */
-  --panel: #0d0f16;
-  --panel-2: #11141d;
-  --border: #1a2b25; /* faint green-tinted border (terminal feel) */
-  --border-bright: #2DB58A; /* Matrix primary used for active borders */
-  --text: #d8ffe9; /* green-white phosphor text */
-  --text-dim: #5b8a76;
-  --muted: #3d5a4f;
+  --bg-2: #0a0c12;
+  --panel: #0e1018;
+  --panel-2: #14171f;
+  --border: #1f2330; /* neutral border, not green-tinted */
+  --border-bright: #2DB58A;
+  --text: #e4e8f0;
+  --text-dim: #7a8499;
+  --muted: #4a5266;
 
   /* Brand — Matrix primary (the single green accent, verbatim) */
   --accent: #2DB58A;
@@ -37,21 +38,28 @@
   --danger: #DC2626; /* Matrix danger (verbatim) */
 
   /* Phosphor glow (authored — realizes Matrix "phosphor glow" trait) */
-  --glow-sm: 0 0 6px rgba(45, 181, 138, 0.45);
-  --glow-md: 0 0 12px rgba(45, 181, 138, 0.5);
-  --glow-text: 0 0 8px rgba(45, 181, 138, 0.55);
 
-  /* Elevation — Matrix: border-driven, minimal shadow */
+  /* Phosphor glow tokens removed — decorative, killed contrast. */
+
+  /* Elevation — shadows reserved for overlays (modals/dropdowns) only.
+     Panels use the surface ladder + 1px border, never both. */
   --shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
-  --shadow-micro: 0 1px 3px rgba(0, 0, 0, 0.5);
 
-  /* Radius scale (Matrix: 4/8) */
+  /* Radius scale */
   --r-sm: 4px;
   --r-md: 4px;
-  --r-lg: 8px;
+  --r-lg: 6px;
   --r-xl: 8px;
 
-  /* Typography — Matrix: Space Mono everywhere */
+  /* Spacing scale — 4px base (anti-slop: rhythm, not monotonous 16px) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+
+  /* Typography — Space Mono for UI */
   --font-mono: "Space Mono", "JetBrains Mono", "Apple SD Gothic Neo",
     "Malgun Gothic", ui-monospace, monospace;
 }
@@ -71,22 +79,6 @@ body {
   font-size: 13px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-}
-
-/* CRT scanline texture overlay — very subtle, decorative */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(45, 181, 138, 0.03) 3px,
-    rgba(0, 0, 0, 0) 4px
-  );
 }
 
 #app {
@@ -115,9 +107,8 @@ body::before {
 /* ---------- Header ---------- */
 .app-header {
   background: var(--panel-2);
-  border-bottom: 1px solid var(--accent);
-  box-shadow: 0 2px 14px rgba(45, 181, 138, 0.12);
-  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
 }
 .header-top {
   display: flex;
@@ -129,56 +120,39 @@ body::before {
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 .logo {
-  font-size: 22px;
-  width: 44px;
-  height: 44px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
-  background: rgba(45, 181, 138, 0.1);
+  background: var(--accent-soft);
   border: 1px solid var(--accent);
   border-radius: var(--r-md);
   color: var(--accent);
-  text-shadow: var(--glow-text);
 }
 .app-header h1 {
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--accent);
-  text-shadow: var(--glow-text);
-}
-/* Blinking terminal cursor after the title */
-.app-header h1 .ko::after {
-  content: "_";
-  color: var(--accent);
-  animation: blink 1s step-end infinite;
-  margin-left: 2px;
-}
-@keyframes blink {
-  50% { opacity: 0; }
+  color: var(--text);
 }
 .subtitle {
-  margin: 3px 0 0;
+  margin: 2px 0 0;
   color: var(--text-dim);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 12px;
 }
 .badge {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 4px 10px;
   border-radius: var(--r-sm);
   background: var(--accent-soft);
-  border: 1px solid rgba(45, 181, 138, 0.4);
   color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   white-space: nowrap;
 }
 
@@ -192,42 +166,29 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 14px 16px;
-  position: relative;
-}
-.kpi-card::before {
-  content: ">";
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  color: var(--accent);
-  opacity: 0.5;
-  font-size: 12px;
 }
 .kpi-value {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
-  color: var(--accent);
-  text-shadow: var(--glow-text);
+  color: var(--text);
 }
 .kpi-label {
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 400;
   color: var(--text-dim);
   margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 /* ---------- Layout ---------- */
 .layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 16px;
-  padding: 16px;
+  grid-template-columns: 240px 1fr;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
   flex: 1;
-  min-height: 0; /* allow inner panes (map / data) to manage their own height */
+  min-height: 0;
 }
 
 /* ---------- Sidebar ---------- */
@@ -248,15 +209,8 @@ body::before {
 .sidebar-head h2 {
   margin: 0;
   font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  text-shadow: var(--glow-text);
-}
-.sidebar-head h2::before {
-  content: "$ ";
-  color: var(--text-dim);
-  text-shadow: none;
+  font-weight: 700;
+  color: var(--text);
 }
 .btn-reset {
   background: transparent;
@@ -267,14 +221,11 @@ body::before {
   cursor: pointer;
   font-size: 11px;
   font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
   transition: all 0.15s;
 }
 .btn-reset:hover {
   color: var(--accent);
   border-color: var(--accent);
-  text-shadow: var(--glow-sm);
 }
 .filter-group {
   margin-bottom: 18px;
@@ -472,11 +423,11 @@ thead th {
   text-align: left;
   padding: 9px 10px;
   font-weight: 700;
-  color: var(--accent);
-  border-bottom: 1px solid var(--accent);
-  font-size: 10px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   cursor: default;
 }
 thead th[data-sort] {
@@ -485,7 +436,6 @@ thead th[data-sort] {
 }
 thead th[data-sort]:hover {
   color: var(--text);
-  text-shadow: var(--glow-sm);
 }
 .arr {
   color: var(--accent);
@@ -516,7 +466,7 @@ td {
 .td-usd {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  color: var(--accent); text-shadow: var(--glow-text);
+  color: var(--accent);
 }
 .td-juris {
   color: var(--text-dim);
@@ -539,7 +489,7 @@ td {
   font-size: 11px;
   font-weight: 500;
   background: var(--accent-soft);
-  color: var(--accent); text-shadow: var(--glow-text);
+  color: var(--accent);
 }
 
 /* ---------- Map legend / popup ---------- */
@@ -627,86 +577,42 @@ td {
   filter: brightness(1.1);
 }
 
-/* ---------- Disclaimer ---------- */
+/* ---------- Footer sources (compact inline links) ---------- */
 .disclaimer {
-  padding: 16px 24px;
+  padding: var(--sp-3) var(--sp-5);
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1.6;
   border-top: 1px solid var(--border);
   background: var(--bg-2);
-}
-
-/* ---------- Floating sources button + overlay ---------- */
-.fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: none;
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: var(--shadow-micro);
-  z-index: 900;
-  transition: filter 0.15s, transform 0.15s;
-}
-.fab:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
-}
-}
-.sources-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 8, 15, 0.7);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 24px;
-}
-.sources-overlay.open {
   display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
 }
-.sources-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 20px 24px;
-  max-width: 640px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
+.footer-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px var(--sp-1);
 }
-.sources-card h3 {
-  margin: 0 0 12px;
+.src-label {
+  color: var(--muted);
+  margin-right: var(--sp-1);
 }
-.src-group {
-  margin-bottom: 8px;
-}
-.src-group summary {
-  cursor: pointer;
-  font-weight: 600;
-  padding: 6px 0;
-  font-size: 13px;
-}
-.src-group ul {
-  margin: 6px 0 10px;
-  padding-left: 18px;
-}
-.src-group li {
-  margin: 4px 0;
-  font-size: 12px;
-}
-.src-group a {
-  color: var(--accent);
+.src-link {
+  color: var(--text-dim);
   text-decoration: none;
+  border-bottom: 1px dotted var(--border);
+  padding-bottom: 1px;
+  transition: color 0.12s;
 }
-.src-group a:hover {
-  text-decoration: underline;
+.src-link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.src-sep {
+  color: var(--muted);
+  margin: 0 2px;
 }
 .muted {
   color: var(--text-dim);
@@ -810,7 +716,7 @@ td {
 }
 .fig-usd {
   font-weight: 700;
-  color: var(--accent); text-shadow: var(--glow-text);
+  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 .fig-ctx {

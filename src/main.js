@@ -17,7 +17,7 @@ import { initMap, renderMap, invalidateMap } from "./components/map.js";
 import { renderCharts } from "./components/charts.js";
 import { initTable, renderTable } from "./components/table.js";
 import { initModal, openModal } from "./components/detailModal.js";
-import { renderSourcesPanel, initSourcesToggle } from "./components/sourcesPanel.js";
+import { renderFooterSources } from "./components/sourcesPanel.js";
 
 const api = { setActors, setTypes, setYearRange, setSourceOrgs, resetFilters };
 
@@ -75,17 +75,19 @@ function buildLayout() {
         </section>
       </main>
     </div>
-    <footer class="disclaimer">${t(L.disclaimer.ko, L.disclaimer.en)}</footer>
-    <button id="sourcesToggle" class="fab" title="Sources">📚</button>
-    <div id="sourcesOverlay" class="sources-overlay">
-      <div class="sources-card">${renderSourcesPanel()}</div>
-    </div>
+    <footer class="disclaimer">
+      <span>${t(L.disclaimer.ko, L.disclaimer.en)}</span>
+      <span class="footer-sources" id="footerSources"></span>
+    </footer>
     <div id="modal" class="modal"></div>
   `;
 
   // Sidebar
   document.getElementById("sidebarMount").innerHTML = renderSidebar(getState(), api);
   bindSidebar(api);
+
+  // Footer sources — compact inline links grouped by org
+  document.getElementById("footerSources").innerHTML = renderFooterSources();
 
   // Tab switching
   document.querySelectorAll(".tab").forEach((btn) => {
@@ -122,7 +124,6 @@ function init() {
   initMap(selectEntity);
   initTable(selectEntity);
   initModal();
-  initSourcesToggle();
   render();
 
   // Re-render on filter change

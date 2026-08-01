@@ -9,7 +9,7 @@ export function renderHeader() {
     <header class="app-header">
       <div class="header-top">
         <div class="brand">
-          <div class="logo">⚡</div>
+          <div class="logo">CFM</div>
           <div>
             <h1>${t(L.appTitle.ko, L.appTitle.en)}</h1>
             <p class="subtitle">${t(L.appSubtitle.ko, L.appSubtitle.en)}</p>

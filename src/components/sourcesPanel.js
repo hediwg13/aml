@@ -2,43 +2,28 @@ import { t, L } from "../i18n.js";
 import { sources } from "../data/dataset.js";
 import { esc } from "../format.js";
 
-// Render a collapsible sources panel grouped by organization.
-export function renderSourcesPanel() {
+// Compact single-line footer sources grouped by org. Replaces the previous
+// large FAB + modal overlay, which took too much visual real estate.
+export function renderFooterSources() {
   const grouped = {};
   sources.forEach((s) => {
-    if (!grouped[s.org]) grouped[s.org] = [];
-    grouped[s.org].push(s);
+    if (!grouped[s.org]) grouped[s.org] = s;
   });
+  // One representative link per org, sorted by org name.
+  const orgs = Object.values(grouped).sort((a, b) => a.org.localeCompare(b.org));
 
-  const orgs = Object.keys(grouped).sort();
+  const links = orgs
+    .map(
+      (s) =>
+        `<a href="${esc(s.url)}" target="_blank" rel="noopener" class="src-link" title="${esc(s.org)}">${esc(shortOrg(s.org))}</a>`
+    )
+    .join('<span class="src-sep">·</span>');
 
-  const body = orgs
-    .map((org) => {
-      const items = grouped[org]
-        .map(
-          (s) =>
-            `<li><a href="${esc(s.url)}" target="_blank" rel="noopener" title="${esc(s.title)}">${esc(s.title)}</a></li>`
-        )
-        .join("");
-      return `<details class="src-group"><summary>${esc(org)} <span class="muted">(${grouped[org].length})</span></summary><ul>${items}</ul></details>`;
-    })
-    .join("");
-
-  return `
-    <div class="sources-panel">
-      <h3>${t(L.sourcesTitle.ko, L.sourcesTitle.en)} <span class="muted">(${sources.length})</span></h3>
-      ${body}
-    </div>`;
+  return `<span class="src-label">${t("출처", "Sources")}:</span> ${links}`;
 }
 
-export function initSourcesToggle() {
-  const btn = document.getElementById("sourcesToggle");
-  const panel = document.getElementById("sourcesOverlay");
-  if (!btn || !panel) return;
-  btn.addEventListener("click", () => {
-    panel.classList.toggle("open");
-  });
-  panel.addEventListener("click", (e) => {
-    if (e.target === panel) panel.classList.remove("open");
-  });
+// Shorten org names for the footer (e.g. "U.S. Treasury / OFAC" → "OFAC").
+function shortOrg(org) {
+  if (org.includes("/")) return org.split("/").pop().trim();
+  return org;
 }
