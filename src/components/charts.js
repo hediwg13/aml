@@ -10,22 +10,22 @@ const COMMON_OPTS = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      labels: { color: "#cdd3e0", font: { size: 11 }, boxWidth: 12 },
+      labels: { color: "#9497a9", font: { size: 11 }, boxWidth: 12 },
       position: "bottom",
     },
     tooltip: {
-      backgroundColor: "#11182a",
-      titleColor: "#fff",
-      bodyColor: "#cdd3e0",
-      borderColor: "#2a3550",
+      backgroundColor: "#16182a",
+      titleColor: "#f4f5fb",
+      bodyColor: "#9497a9",
+      borderColor: "#262842",
       borderWidth: 1,
       padding: 10,
       callbacks: { label: (ctx) => ` ${ctx.dataset.label || ctx.label}: ${formatUsd(ctx.raw)}` },
     },
   },
   scales: {
-    x: { ticks: { color: "#8a93a8" }, grid: { color: "#1c2540" } },
-    y: { ticks: { color: "#8a93a8", callback: (v) => formatUsd(v) }, grid: { color: "#1c2540" } },
+    x: { ticks: { color: "#9497a9" }, grid: { color: "#1c1e34" } },
+    y: { ticks: { color: "#9497a9", callback: (v) => formatUsd(v) }, grid: { color: "#1c1e34" } },
   },
 };
 
@@ -87,7 +87,7 @@ export function renderCharts(entities, flows) {
       ...COMMON_OPTS,
       plugins: {
         ...COMMON_OPTS.plugins,
-        title: { display: true, color: "#e6e9f2", text: "Reported USD by actor", font: { size: 12 } },
+        title: { display: true, color: "#f4f5fb", text: "Reported USD by actor", font: { size: 12 } },
         legend: { display: false },
       },
     },
@@ -113,7 +113,7 @@ export function renderCharts(entities, flows) {
       },
       plugins: {
         ...COMMON_OPTS.plugins,
-        title: { display: true, color: "#e6e9f2", text: "Illicit funds by year (stacked by actor)", font: { size: 12 } },
+        title: { display: true, color: "#f4f5fb", text: "Illicit funds by year (stacked by actor)", font: { size: 12 } },
         legend: { ...COMMON_OPTS.plugins.legend, labels: { ...COMMON_OPTS.plugins.legend.labels, boxWidth: 10 } },
       },
     },
@@ -129,7 +129,7 @@ export function renderCharts(entities, flows) {
       datasets: [
         {
           data: typeKeys.map((k) => typeCounts[k]),
-          backgroundColor: ["#4f8cff", "#22c1a3", "#a855f7", "#f5a524", "#f5475f", "#8a93a8"],
+          backgroundColor: ["#7132f5", "#8b5cf6", "#a78bfa", "#f5a524", "#f5475f", "#686b82"],
           borderWidth: 0,
         },
       ],
@@ -165,7 +165,7 @@ export function renderCharts(entities, flows) {
       indexAxis: "y",
       plugins: {
         ...COMMON_OPTS.plugins,
-        title: { display: true, color: "#e6e9f2", text: "Top 10 entities (reported USD)", font: { size: 12 } },
+        title: { display: true, color: "#f4f5fb", text: "Top 10 entities (reported USD)", font: { size: 12 } },
         legend: { display: false },
       },
       scales: {
