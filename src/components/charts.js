@@ -10,22 +10,28 @@ const COMMON_OPTS = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      labels: { color: "#9497a9", font: { size: 11 }, boxWidth: 12 },
+      labels: {
+        color: "#5b8a76",
+        font: { size: 11, family: "Space Mono, monospace" },
+        boxWidth: 12,
+      },
       position: "bottom",
     },
     tooltip: {
-      backgroundColor: "#16182a",
-      titleColor: "#f4f5fb",
-      bodyColor: "#9497a9",
-      borderColor: "#262842",
+      backgroundColor: "#0d0f16",
+      titleColor: "#2DB58A",
+      bodyColor: "#d8ffe9",
+      borderColor: "#2DB58A",
       borderWidth: 1,
+      titleFont: { family: "Space Mono, monospace" },
+      bodyFont: { family: "Space Mono, monospace" },
       padding: 10,
       callbacks: { label: (ctx) => ` ${ctx.dataset.label || ctx.label}: ${formatUsd(ctx.raw)}` },
     },
   },
   scales: {
-    x: { ticks: { color: "#9497a9" }, grid: { color: "#1c1e34" } },
-    y: { ticks: { color: "#9497a9", callback: (v) => formatUsd(v) }, grid: { color: "#1c1e34" } },
+    x: { ticks: { color: "#5b8a76", font: { family: "Space Mono, monospace" } }, grid: { color: "#11141d" } },
+    y: { ticks: { color: "#5b8a76", font: { family: "Space Mono, monospace" }, callback: (v) => formatUsd(v) }, grid: { color: "#11141d" } },
   },
 };
 
@@ -87,7 +93,7 @@ export function renderCharts(entities, flows) {
       ...COMMON_OPTS,
       plugins: {
         ...COMMON_OPTS.plugins,
-        title: { display: true, color: "#f4f5fb", text: "Reported USD by actor", font: { size: 12 } },
+        title: { display: true, color: "#2DB58A", text: "Reported USD by actor", font: { size: 12 } },
         legend: { display: false },
       },
     },
@@ -113,7 +119,7 @@ export function renderCharts(entities, flows) {
       },
       plugins: {
         ...COMMON_OPTS.plugins,
-        title: { display: true, color: "#f4f5fb", text: "Illicit funds by year (stacked by actor)", font: { size: 12 } },
+        title: { display: true, color: "#2DB58A", text: "Illicit funds by year (stacked by actor)", font: { size: 12 } },
         legend: { ...COMMON_OPTS.plugins.legend, labels: { ...COMMON_OPTS.plugins.legend.labels, boxWidth: 10 } },
       },
     },
@@ -129,7 +135,7 @@ export function renderCharts(entities, flows) {
       datasets: [
         {
           data: typeKeys.map((k) => typeCounts[k]),
-          backgroundColor: ["#7132f5", "#8b5cf6", "#a78bfa", "#f5a524", "#f5475f", "#686b82"],
+          backgroundColor: ["#2DB58A", "#16A34A", "#4ade80", "#D97706", "#DC2626", "#5b8a76"],
           borderWidth: 0,
         },
       ],
@@ -165,7 +171,7 @@ export function renderCharts(entities, flows) {
       indexAxis: "y",
       plugins: {
         ...COMMON_OPTS.plugins,
-        title: { display: true, color: "#f4f5fb", text: "Top 10 entities (reported USD)", font: { size: 12 } },
+        title: { display: true, color: "#2DB58A", text: "Top 10 entities (reported USD)", font: { size: 12 } },
         legend: { display: false },
       },
       scales: {
