@@ -20,7 +20,9 @@ export function renderHeader() {
     </header>`;
 }
 
-// Four KPI cards. Computed from the full (unfiltered) dataset for stable totals.
+// KPI block as a hierarchy: one hero metric (total reported USD) + three
+// supporting metrics. Not an equal-weight 4-card grid (anti-slop L1).
+// Computed from the full (unfiltered) dataset for stable totals.
 export function renderKpi() {
   const entityCount = entities.length;
 
@@ -36,17 +38,22 @@ export function renderKpi() {
     entities.map((e) => (e.jurisdiction || "").split("/")[0].trim()).filter(Boolean)
   );
 
-  const kpi = (val, label) => `
-    <div class="kpi-card">
-      <div class="kpi-value">${val}</div>
-      <div class="kpi-label">${t(L[label].ko, L[label].en)}</div>
+  const support = (val, label) => `
+    <div class="kpi-support">
+      <div class="kpi-support-value">${val}</div>
+      <div class="kpi-support-label">${t(L[label].ko, L[label].en)}</div>
     </div>`;
 
   return `
-    <div class="kpi-row">
-      ${kpi(entityCount, "kpiEntities")}
-      ${kpi(formatUsd(usdSum), "kpiUsd")}
-      ${kpi(sanctionActions, "kpiActions")}
-      ${kpi(jurisdictions.size, "kpiJurisdictions")}
+    <div class="kpi-block">
+      <div class="kpi-hero">
+        <div class="kpi-hero-value">${formatUsd(usdSum)}</div>
+        <div class="kpi-hero-label">${t(L.kpiUsd.ko, L.kpiUsd.en)}</div>
+      </div>
+      <div class="kpi-supporting">
+        ${support(entityCount, "kpiEntities")}
+        ${support(sanctionActions, "kpiActions")}
+        ${support(jurisdictions.size, "kpiJurisdictions")}
+      </div>
     </div>`;
 }

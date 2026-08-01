@@ -45,19 +45,28 @@
      Panels use the surface ladder + 1px border, never both. */
   --shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
 
-  /* Radius scale */
+  /* Radius scale — devtools domain (Cuuper22): 6/8/12. Inner = outer − gap (yetone #21). */
   --r-sm: 4px;
-  --r-md: 4px;
-  --r-lg: 6px;
-  --r-xl: 8px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
 
-  /* Spacing scale — 4px base (anti-slop: rhythm, not monotonous 16px) */
+  /* Spacing scale — 4px base, applied by relationship (yetone #32):
+     4/8/16/32/64 → inside component 8, between components 12-16, between sections 24-32. */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
   --sp-4: 16px;
   --sp-5: 24px;
   --sp-6: 32px;
+  --sp-7: 64px;
+
+  /* Type scale — ≥1.25× ratio between steps (yetone #12). Steps merged to few. */
+  --t-xs: 11px;   /* captions */
+  --t-sm: 13px;   /* body */
+  --t-md: 16px;   /* card title / h3 */
+  --t-lg: 22px;   /* section heading */
+  --t-xl: 32px;   /* hero metric */
 
   /* Typography — Space Mono for UI */
   --font-mono: "Space Mono", "JetBrains Mono", "Apple SD Gothic Neo",
@@ -156,29 +165,61 @@ body {
   white-space: nowrap;
 }
 
-.kpi-row {
+/* KPI block: hero metric + supporting metrics (anti-slop L1 — not an equal grid).
+   Hero is large and carries the headline number; supporting metrics sit beside
+   it at smaller weight, separated by relationship-based spacing (L2). */
+.kpi-block {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: minmax(220px, 1.1fr) 2fr;
+  gap: var(--sp-3);
+  align-items: stretch;
 }
-.kpi-card {
+.kpi-hero {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 14px 16px;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.kpi-value {
-  font-size: 22px;
+.kpi-hero-value {
+  font-size: var(--t-xl);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  line-height: 1.05;
+}
+.kpi-hero-label {
+  font-size: var(--t-xs);
+  color: var(--text-dim);
+  margin-top: var(--sp-2);
+}
+.kpi-supporting {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-3);
+}
+.kpi-support {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-3) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.kpi-support-value {
+  font-size: var(--t-md);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--text);
 }
-.kpi-label {
-  font-size: 11px;
-  font-weight: 400;
+.kpi-support-label {
+  font-size: var(--t-xs);
   color: var(--text-dim);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 /* ---------- Layout ---------- */
@@ -297,7 +338,7 @@ body {
 .main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sp-4); /* between sections (L2) */
   min-width: 0;
   min-height: 0; /* allow flex children (map) to shrink within the column */
 }
@@ -336,7 +377,7 @@ body {
 .tab-pane {
   display: none;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sp-4); /* between sections (L2) */
   min-height: 0; /* allow map to size correctly within flex */
 }
 .tab-pane.active {
@@ -371,7 +412,7 @@ body {
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: var(--sp-3); /* between components (L2) */
 }
 .chart-card {
   background: var(--panel);
@@ -787,8 +828,11 @@ td {
   .sidebar {
     position: static;
   }
-  .kpi-row {
-    grid-template-columns: repeat(2, 1fr);
+  .kpi-block {
+    grid-template-columns: 1fr;
+  }
+  .kpi-supporting {
+    grid-template-columns: repeat(3, 1fr);
   }
   .charts-grid {
     grid-template-columns: 1fr;
@@ -798,7 +842,7 @@ td {
   }
 }
 @media (max-width: 600px) {
-  .kpi-row {
+  .kpi-supporting {
     grid-template-columns: 1fr;
   }
   .fig-list li {
